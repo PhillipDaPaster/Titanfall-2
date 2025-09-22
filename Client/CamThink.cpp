@@ -1,29 +1,31 @@
 #include "CamThink.h"
 
-__int64 __fastcall CamThink(__int64 input) {
-    __int64 result = sub_180251D60(input, 0xFFFFFFFFLL);
-    CameraState* cam = reinterpret_cast<CameraState*>(result);
+// sub_18024DB60 { client.dll + 40 55 53 57 48 8D AC 24 ? ? ? ? 48 81 EC 00 02 00 00 }
 
-    if (*(uint64_t*)(result + 248))
+__int64 __fastcall CamThink(__int64 input) {
+    __int64 OriginalCamState = GetCameraStatePtr(input, 0xFFFFFFFFLL);
+    CameraState* cam = reinterpret_cast<CameraState*>(OriginalCamState);
+
+    if (*(uint64_t*)(OriginalCamState + 248))
         return (*(std::int64_t(__fastcall**)(__int64))(*(_QWORD*)input + 400LL))(input);
 
-    int type = *(int*)(result + 256);
+    int type = *(int*)(OriginalCamState + 256);
     if (type == 1) {
-        result = (*(std::int64_t(__fastcall**)(__int64))(*(_QWORD*)input + 272LL))(input);
+        OriginalCamState = (*(std::int64_t(__fastcall**)(__int64))(*(_QWORD*)input + 272LL))(input);
     }
     else if (type == 2) {
-        result = (*(std::int64_t(__fastcall**)(__int64))(*(_QWORD*)input + 280LL))(input);
+        OriginalCamState = (*(std::int64_t(__fastcall**)(__int64))(*(_QWORD*)input + 280LL))(input);
     }
 
     if (cam->flag2) {
-        if (!qword_1811BC4D0) {
-            qword_1811BC4D0 = (*(std::int64_t(__fastcall**)(__int64, const char*))(*(_QWORD*)qword_182E43F80 + 128LL)) 
+        if (!svCheatsConVar) {
+            svCheatsConVar = (*(std::int64_t(__fastcall**)(__int64, const char*))(*(_QWORD*)qword_182E43F80 + 128LL)) 
               (qword_182E43F80, "sv_cheats");
         }
 
-        __int64 serverVar = sub_18014EF40(0xFFFFFFFFLL);
-        bool bypass = qword_1811BC4D0 &&
-                      !*(_DWORD*)(*(_QWORD*)(qword_1811BC4D0 + 56) + 92LL) &&
+        __int64 serverVar = GetServerObject();
+        bool bypass = svCheatsConVar &&
+                      !*(_DWORD*)(*(_QWORD*)(svCheatsConVar + 56) + 92LL) &&
                       !*(_DWORD*)(qword_1811BC9F8 + 92) &&
                       (!serverVar || !*(_BYTE*)(serverVar + 11360));
 
@@ -91,5 +93,5 @@ __int64 __fastcall CamThink(__int64 input) {
         }
     }
 
-    return result;
+    return OriginalCamState;
 }
