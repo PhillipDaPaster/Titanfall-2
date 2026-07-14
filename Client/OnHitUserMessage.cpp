@@ -1,6 +1,10 @@
 // sub_180340D20  ( client.dll + 4C 8B DC 57 48 83 EC 60 )
 
-// 0x3A is Entity Hit
+// im still actively finding these 
+#define ON_ENTITY_HIT 0x3A // entity hit
+#define ON_ENTITY_SPAWN 0x38 
+#define ON_PLAYER_HURT 0x0B // local player hurt
+
 char __fastcall OnHitUserMessage(void* pData, int message_flag, __int128* pMessageBuffer) 
 {
     if (message_flag < 0 || message_flag >= *reinterpret_cast<int*>(reinterpret_cast<uintptr_t>(pData) + 36))
