@@ -17,7 +17,7 @@ struct CDrawModelInfo
     uint8_t pad2[5];
 };
 
-void __fastcall DrawModelExecute(
+void __fastcall DrawModel(
         struct CStudioRender *this,
         struct DrawModelResults_t *results,
         CDrawModelInfo *info,
